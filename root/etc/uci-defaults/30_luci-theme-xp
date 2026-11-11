@@ -1,0 +1,31 @@
+﻿#!/bin/sh
+
+changed=0
+
+set_opt() {
+	local key="$1"
+	local val="$2"
+
+	if ! uci -q get "luci.$key" >/dev/null 2>&1; then
+		uci set "luci.$key=$val"
+		changed=1
+	fi
+}
+
+set_opt themes.XP /luci-static/xp
+
+current_theme="$(uci -q get luci.main.mediaurlbase)"
+
+if [ "$current_theme" = "/luci-static/win98" ] || [ -z "$current_theme" ]; then
+	set_opt main.mediaurlbase /luci-static/xp
+	uci set luci.main.mediaurlbase='/luci-static/xp'
+	changed=1
+elif [ "$PKG_UPGRADE" != 1 ] && [ "$changed" = 1 ]; then
+	set_opt main.mediaurlbase /luci-static/xp
+fi
+
+if [ "$changed" = 1 ]; then
+	uci commit luci
+fi
+
+exit 0

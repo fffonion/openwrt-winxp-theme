@@ -1,0 +1,12 @@
+Wikipedia/Wikimedia Commons wallpaper source
+
+Local file:
+wallpapers/wikipedia-bliss.svg
+
+Downloaded from:
+https://commons.wikimedia.org/wiki/File:Vectorized_Bliss.svg
+
+Direct download:
+https://commons.wikimedia.org/wiki/Special:Redirect/file/Vectorized_Bliss.svg
+
+The Commons file page describes this as a vectorized image resembling the Windows XP "Bliss" wallpaper. Keep the upstream attribution and license metadata with the theme package when redistributing.

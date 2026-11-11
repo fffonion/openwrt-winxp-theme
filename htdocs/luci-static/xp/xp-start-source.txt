@@ -1,0 +1,13 @@
+Windows XP Start button source notes
+
+Local files:
+- xp-start-button.png
+- xp-start-emblem.png
+
+The button image was cropped from the Windows XP Visual Guidelines taskbar reference image:
+https://www.retrospace.net/download/WebApplications/WindowsXPDesignGuidelines/Content/Media/content_media/cto_Taskbar.jpg
+
+The source page describes the Windows XP Start button and taskbar and shows the taskbar reference:
+https://www.retrospace.net/download/WebApplications/WindowsXPDesignGuidelines/controls.htm#taskbar
+
+The compact emblem is cropped from the same source-derived button image for favicon and small in-theme marks.

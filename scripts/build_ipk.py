@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 from __future__ import annotations
 
@@ -13,11 +13,11 @@ import time
 from pathlib import Path
 
 
-PKG_NAME = "luci-theme-win98"
-PKG_VERSION = "2026.05.16-r147"
+PKG_NAME = "luci-theme-xp"
+PKG_VERSION = "2026.05.16-r1"
 PKG_ARCH = "all"
 PKG_DEPENDS = "luci-base, luci-theme-openwrt"
-PKG_DESCRIPTION = "OpenWrt LuCI 24.x Windows 98 retro theme"
+PKG_DESCRIPTION = "OpenWrt LuCI 24.x Windows XP retro theme"
 PKG_MAINTAINER = "Codex"
 PKG_SECTION = "luci"
 PKG_PRIORITY = "optional"
@@ -49,7 +49,7 @@ def bump_script_version(script_path: Path) -> str:
 
 
 def normalize_mode(path: Path) -> int:
-    if path.name == "30_luci-theme-win98":
+    if path.name == "30_luci-theme-xp":
         return 0o755
     if path.suffix == ".sh":
         return 0o755
@@ -159,11 +159,11 @@ def build_control_tar() -> bytes:
 
     postinst = """#!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-\tif ! uci -q get luci.themes.Win98 >/dev/null 2>&1; then
-\t\tuci set luci.themes.Win98='/luci-static/win98'
+\tif ! uci -q get luci.themes.XP >/dev/null 2>&1; then
+\t\tuci set luci.themes.XP='/luci-static/xp'
 \tfi
 \tif ! uci -q get luci.main.mediaurlbase >/dev/null 2>&1; then
-\t\tuci set luci.main.mediaurlbase='/luci-static/win98'
+\t\tuci set luci.main.mediaurlbase='/luci-static/xp'
 \tfi
 \tuci commit luci
 \trm -f /tmp/luci-indexcache.*
@@ -175,10 +175,10 @@ def build_control_tar() -> bytes:
 
     postrm = """#!/bin/sh
 [ -n "${IPKG_INSTROOT}" ] || {
-\tif [ "$(uci -q get luci.main.mediaurlbase)" = "/luci-static/win98" ]; then
+\tif [ "$(uci -q get luci.main.mediaurlbase)" = "/luci-static/xp" ]; then
 \t\tuci -q set luci.main.mediaurlbase='/luci-static/openwrt.org'
 \tfi
-\tuci -q delete luci.themes.Win98
+\tuci -q delete luci.themes.XP
 \tuci commit luci
 }
 """.encode("utf-8")
@@ -273,7 +273,7 @@ def build_ipk_tar(root: Path, output_path: Path) -> None:
 def main() -> int:
     global PKG_VERSION
 
-    parser = argparse.ArgumentParser(description="Build a local .ipk for luci-theme-win98")
+    parser = argparse.ArgumentParser(description="Build a local .ipk for luci-theme-xp")
     parser.add_argument(
         "--root",
         default=Path(__file__).resolve().parents[1],
@@ -293,8 +293,6 @@ def main() -> int:
         help="Outer package container format",
     )
     args = parser.parse_args()
-
-    PKG_VERSION = bump_script_version(Path(__file__).resolve())
 
     root = args.root.resolve()
     output_path = args.out or (root / "dist" / f"{PKG_NAME}_{PKG_VERSION}_{PKG_ARCH}.ipk")

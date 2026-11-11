@@ -1,0 +1,62 @@
+Windows XP icon source notes
+
+Menu icons are resized from the Windows XP icon collection published at:
+https://github.com/softwarehistorysociety/XPIcons/tree/main/XP
+
+The collection is indexed by Windows Icon Archive:
+https://limehawk.github.io/windows-icon-archive/#winxp
+
+The upstream repository includes an Unlicense public-domain dedication in:
+https://github.com/softwarehistorysociety/XPIcons/blob/main/LICENSE
+
+Generated local files:
+- admin-detail.png: XP/AdministrativeTools.png
+- admin.png: XP/UserAccounts.png
+- app.png: XP/ApplicationWindow.png
+- bandwidth-detail.png: XP/PerformanceMonitor.png
+- bandwidth.png: XP/GraphView.png
+- binding-detail.png: XP/PadlockAlt.png
+- binding.png: XP/Padlock.png
+- control-panel.png: XP/ControlPanel.png
+- crontab-detail.png: XP/ScheduledTasks.png
+- crontab.png: XP/ScheduledTasks.png
+- dhcp-detail.png: XP/NetworkConnections.png
+- dhcp.png: XP/NewNetworkConnection.png
+- diagnostics-detail.png: XP/Troubleshoot.png
+- diagnostics.png: XP/Troubleshoot.png
+- firewall.png: XP/Firewall.png
+- flash-detail.png: XP/WriteFilestoDisc.png
+- flash.png: XP/WriteFilestoDisc.png
+- folder.png: XP/FolderClosed.png
+- go-next.png: XP/Forward.png
+- go-previous.png: XP/Back.png
+- interfaces.png: XP/NetworkConnections.png
+- log-detail.png: XP/EventViewer.png
+- log.png: XP/EventViewer.png
+- logon-key.png: XP/Key.png
+- logout.png: XP/Logout.png
+- msg_error.png: XP/Critical.png
+- msg_information.png: XP/Information.png
+- mwan.png: XP/NetworkConnection.png
+- network.png: XP/NetworkandInternet.png
+- overview.png: XP/SystemInformation.png
+- process-detail.png: XP/TaskManager.png
+- processes.png: XP/TaskManager.png
+- realtime.png: XP/PerformanceMonitor.png
+- reboot-detail.png: XP/Restart.png
+- reboot.png: XP/Restart.png
+- routes.png: XP/Router.png
+- services.png: XP/Services.png
+- software-detail.png: XP/AddorRemoveWindowsComponents.png
+- software.png: XP/AddNewPrograms.png
+- speedtest-detail.png: XP/PerformanceMonitor.png
+- speedtest.png: XP/Performance.png
+- startup-detail.png: XP/StartMenuPrograms.png
+- startup.png: XP/StartMenuPrograms.png
+- status.png: XP/MyComputer.png
+- system-detail.png: XP/SystemProperties.png
+- system.png: XP/SystemProperties.png
+- upnp-detail.png: XP/NetworkSetup.png
+- upnp.png: XP/NetworkSetup.png
+
+These assets are used to match the requested Windows XP visual style.
