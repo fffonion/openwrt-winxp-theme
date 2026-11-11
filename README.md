@@ -1,34 +1,37 @@
-# luci-theme-win98
+﻿# luci-theme-xp
 
 [中文文档](README.zh.md)
 
-`luci-theme-win98` is an OpenWrt 24.x / LuCI theme with a Windows 98 inspired desktop style. It uses classic gray window chrome, raised buttons, recessed inputs, blue title bars, a teal desktop background, and a fixed taskbar footer.
+`luci-theme-xp` is an OpenWrt 24.x / LuCI theme that renders LuCI as a Windows XP Luna-style desktop. It uses XP blue title bars, a green Start button, a glossy taskbar, a Wikipedia/Wikimedia Commons Bliss-style wallpaper, and richer XP-era menu icons.
 
 ## Preview
 
-![LuCI Windows 98 login preview](docs/login.png)
+![LuCI Windows XP login preview](docs/login.png)
 
-![LuCI Windows 98 desktop preview](docs/overview.png)
+![LuCI Windows XP desktop preview](docs/overview.png)
 
 ## Features
 
 - OpenWrt 24.x / LuCI ucode theme structure
-- Windows 98 inspired desktop background, taskbar, window frames, tabs, buttons, and forms
-- Classic menu icons sourced from the GPL-2.0 `nestoris/Win98SE` icon theme and bundled under `htdocs/luci-static/win98/icons/menu/`
-- Start button flag asset is downloaded from the public-domain Wikimedia Commons `Windows logo - 1992.svg` file.
-- Uses `Pixelated MS Sans Serif` from the MIT-licensed `jdan/98.css` project as the primary UI font
-- Static assets served from `/luci-static/win98`
-- LuCI theme registration name: `Win98`
-- Includes login page, header, footer, desktop icon, table, form, alert, and mobile styles
-- Can be packaged locally as an `.ipk`
+- Windows XP Luna-inspired desktop, taskbar, window frames, title buttons, tabs, buttons, forms, and login dialog
+- Wikipedia/Wikimedia Commons Bliss-style wallpaper bundled at `htdocs/luci-static/xp/wallpapers/wikipedia-bliss.svg`
+- XP-style Start button and emblem PNGs sourced from the Windows XP Visual Guidelines taskbar reference and bundled at `htdocs/luci-static/xp/xp-start-button.png` and `htdocs/luci-static/xp/xp-start-emblem.png`
+- Menu icons refreshed from the Windows XP icon library indexed by Windows Icon Archive and bundled under `htdocs/luci-static/xp/icons/menu/large/`
+- Icon source notes are tracked in `htdocs/luci-static/xp/icons/menu/large/xp-icons-source.txt`
+- Static assets served from `/luci-static/xp`
+- LuCI theme registration name: `XP`
+- Includes login page, header, footer, desktop icon, tables, forms, alerts, custom scrollbars, desktop windows, and mobile styles
+- Can be verified and packaged locally as an `.ipk`
 
 ## Directory Layout
 
 ```text
-htdocs/luci-static/win98/         # Static assets and CSS
-ucode/template/themes/win98/      # LuCI ucode templates
+htdocs/luci-static/xp/         # Static assets, CSS, icons, and window manager script
+htdocs/luci-static/xp/wallpapers/ # Wikipedia/Wikimedia Commons wallpaper asset and source notes
+ucode/template/themes/xp/      # LuCI ucode templates
 root/etc/uci-defaults/            # Theme registration script
 scripts/build_ipk.py              # Local .ipk package builder
+tests/xp-theme-style.ps1          # Lightweight XP style regression checks
 ```
 
 ## Use In An OpenWrt Feed
@@ -37,17 +40,37 @@ Place this directory under a LuCI feed path, then run:
 
 ```sh
 ./scripts/feeds update -a
-./scripts/feeds install luci-theme-win98
+./scripts/feeds install luci-theme-xp
 make menuconfig
 ```
 
 Enable it under:
 
 ```text
-LuCI -> Themes -> luci-theme-win98
+LuCI -> Themes -> luci-theme-xp
 ```
 
-After installation, switch to `Win98` in the LuCI theme settings.
+After installation, switch to `XP` in the LuCI theme settings.
+
+You can also switch the active LuCI theme with UCI:
+
+```sh
+uci set luci.main.mediaurlbase='/luci-static/xp'
+uci commit luci
+rm -f /tmp/luci-indexcache.*
+rm -rf /tmp/luci-modulecache/
+/etc/init.d/rpcd reload
+```
+
+## Local Verification
+
+Run the style regression checks:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/xp-theme-style.ps1
+```
+
+The check confirms that the XP Luna tokens, Wikipedia wallpaper asset, taskbar gradient, rounded window titlebar, mobile token override, Start SVG, and XP icon source file are present.
 
 ## Local Packaging
 
@@ -57,12 +80,12 @@ This repository includes a buildroot-independent packaging script:
 python scripts/build_ipk.py
 ```
 
-Each run increments the package revision suffix in `scripts/build_ipk.py`, for example from `2026.05.16-r13` to `2026.05.16-r14`, and uses that new version for the package control metadata. The default artifact is written to `dist/`. You can also specify an output path:
+The package version is controlled by `PKG_VERSION` in `scripts/build_ipk.py`; the current local package is `2026.05.16-r1`. The default artifact is written to `dist/`. You can also specify an output path:
 
 ```sh
-python scripts/build_ipk.py --out dist/luci-theme-win98.ipk
+python scripts/build_ipk.py --out dist/luci-theme-xp.ipk
 ```
 
 ## GitHub Actions
 
-The included workflow builds the package on push, pull request, and manual dispatch, then uploads the `.ipk` artifact.
+The workflow verifies the XP style checks and builds an `.ipk` artifact on pull requests, pushes, and manual dispatches. On push or manual dispatch, it also creates or updates a release for the current commit tagged as `ipk-<short-sha>`.

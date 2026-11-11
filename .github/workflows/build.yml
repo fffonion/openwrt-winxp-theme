@@ -1,18 +1,19 @@
-name: Build IPK
+﻿name: Verify and build XP theme IPK
 
 on:
   push:
     branches:
       - "main"
       - "master"
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  release:
-    name: Build and release luci-theme-win98
+  build:
+    name: Verify style and build package
     runs-on: ubuntu-latest
 
     steps:
@@ -26,47 +27,60 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Build and publish release for each commit
+      - name: Verify XP theme style markers
+        shell: pwsh
+        run: ./tests/xp-theme-style.ps1
+
+      - name: Build IPK artifact
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          python scripts/build_ipk.py --out dist/luci-theme-xp.ipk
+
+      - name: Upload IPK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: luci-theme-xp-ipk
+          path: dist/*.ipk
+          if-no-files-found: error
+
+  release:
+    name: Publish current commit release
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build and publish release for current commit
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
-          mapfile -t shas < <(python - <<'PY'
-          import json
-          import os
+          sha="${GITHUB_SHA}"
+          short_sha="${sha:0:12}"
+          tag="ipk-${short_sha}"
+          out="dist/luci-theme-xp-${short_sha}.ipk"
 
-          event_path = os.environ["GITHUB_EVENT_PATH"]
-          with open(event_path, "r", encoding="utf-8") as fh:
-              event = json.load(fh)
+          pwsh ./tests/xp-theme-style.ps1
+          python scripts/build_ipk.py --out "$out"
 
-          for commit in event.get("commits", []):
-              sha = commit.get("id")
-              if sha:
-                  print(sha)
-          PY
-          )
-
-          if [ "${#shas[@]}" -eq 0 ]; then
-            shas=("${GITHUB_SHA}")
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" "$out" --clobber
+          else
+            gh release create "$tag" "$out" \
+              --target "$sha" \
+              --title "luci-theme-xp XP ${short_sha}" \
+              --notes "Automated XP theme IPK build for commit ${sha}." \
+              --latest=false
           fi
-
-          for sha in "${shas[@]}"; do
-            git checkout --force "$sha"
-
-            short_sha="${sha:0:12}"
-            tag="ipk-${short_sha}"
-            out="dist/luci-theme-win98-${short_sha}.ipk"
-
-            python scripts/build_ipk.py --out "$out"
-
-            if gh release view "$tag" >/dev/null 2>&1; then
-              gh release upload "$tag" "$out" --clobber
-            else
-              gh release create "$tag" "$out" \
-                --target "$sha" \
-                --title "luci-theme-win98 ${short_sha}" \
-                --notes "Automated IPK build for commit ${sha}." \
-                --latest=false
-            fi
-          done
